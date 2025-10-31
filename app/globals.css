@@ -79,18 +79,15 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
-}
 
-@layer base {
   html {
     scroll-behavior: smooth;
   }
-  * {
-    border-color: hsl(var(--border));
-  }
+
   body {
     @apply bg-background text-foreground;
   }
+
   button {
     @apply active:outline-none;
   }
