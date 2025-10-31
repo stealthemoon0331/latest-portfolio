@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { FaLocationArrow } from "react-icons/fa6";
+// import { FaLocationArrow } from "react-icons/fa6";
 
-import { MagicButton } from "@/components/ui/magic-button";
-import { links } from "@/config";
+// import { MagicButton } from "@/components/ui/magic-button";
+// import { links } from "@/config";
 import { socialMedia } from "@/data";
 
 export const Footer = () => {
