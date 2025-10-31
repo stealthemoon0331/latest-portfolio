@@ -12,12 +12,12 @@ const storyPages = [
   },
   {
     title: "University & Foundation",
-    content: "I immersed myself in mathematics, computer science, and problem-solving at university. At Toyota Tsusho, I transformed academic knowledge into real-world solutions, developing large-scale logistics applications and learning the importance of clean, maintainable code in agile environments.",
+    content: "I immersed myself in mathematics, computer science, and problem-solving at university. At 'JustSystems XMetal', I transformed academic knowledge into real-world solutions, developing large-scale logistics applications and learning the importance of clean, maintainable code in agile environments.",
     image: "/gallery/20.jpg",
   },
   {
     title: "Leadership & Innovation",
-    content: "Joining JSOL Corporation marked a turning point. I took on leadership responsibilities—designing scalable architectures, integrating blockchain systems, and deploying AI-powered features. These experiences honed my ability to connect technical innovation with tangible business value.",
+    content: "'TechFlow Solutions' marked a turning point. I took on leadership responsibilities—designing scalable architectures, integrating blockchain systems, and deploying AI-powered features. These experiences honed my ability to connect technical innovation with tangible business value.",
     image: "/gallery/14.jpg",
   },
   {
