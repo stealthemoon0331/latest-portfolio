@@ -8,6 +8,7 @@ import { Grid } from "@/components/grid";
 import { Hero } from "@/components/hero";
 import { FloatingNav } from "@/components/ui/floating-nav";
 import { RecentProjects } from "@/components/recent-projects";
+import { Gallery } from "@/components/gallery";
 import { navItems } from "@/data";
 
 const MainPage = () => {
@@ -31,6 +32,7 @@ const MainPage = () => {
         <Grid />
         <Experience />
         <RecentProjects />
+        <Gallery />
         {/* <Clients /> */}
         {/* <Approach /> */}
         {/* <Footer /> */}
