@@ -174,21 +174,21 @@ export const companies = [
 export const workExperience = [
   {
     id: 1,
-    title: " Junior Full-Stack and Machine Learning Engineer / Intern",
+    title: " Junior Full-Stack and ML Engineer / Intern - JustSystems XMetal",
     desc: "Contributed to full-stack features and ML prototypes, improving UI interactivity and code quality.",
     className: "md:col-span-2",
     thumbnail: "/exp1.svg",
   },
   {
     id: 2,
-    title: " Mid-Level Full-Stack and Machine Learning Engineer",
+    title: " Mid-Level Full-Stack and ML Engineer - Cybozu, Inc",
     desc: "Delivered end-to-end features across frontend, backend, and ML; built scalable APIs and model services.",
     className: "md:col-span-2", // change to md:col-span-2
     thumbnail: "/exp2.svg",
   },
   {
     id: 3,
-    title: " Senior Full-Stack & AI Engineer",
+    title: " Senior Full-Stack & AI Engineer - TechFlow Solutions",
     desc: "Led architecture and delivery of AI‑powered web apps; mentored engineers and improved DX.",
     className: "md:col-span-2", // change to md:col-span-2
     thumbnail: "/exp3.svg",

@@ -159,11 +159,12 @@ export const RecentProjects = () => {
         </div>
       </div>
 
+      
+
       {/* Filter bars */}
       <div className="mx-auto mt-4 flex max-w-7xl flex-col gap-2 px-4">
         {/* Fields */}
         <div className="flex items-center gap-2">
-          <span className="shrink-0 text-xs text-white/60 md:text-sm">Fields</span>
           <div className="flex-1 overflow-x-auto [scrollbar-width:none]">
             <div className="flex gap-2 pr-4">
               {fields.map((f) => (
@@ -183,10 +184,9 @@ export const RecentProjects = () => {
             </div>
           </div>
         </div>
-
+        <hr/>
         {/* Skills */}
         <div className="flex items-center gap-2">
-          <span className="shrink-0 text-xs text-white/60 md:text-sm">Skills</span>
           <div className="flex-1 overflow-x-auto [scrollbar-width:none]">
             <div className="flex gap-2 pr-4">
               {skills.map((s) => (

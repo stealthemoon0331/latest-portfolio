@@ -6,6 +6,7 @@ import { Spotlight } from "@/components/ui/spotlight";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import { MagicButton } from "@/components/ui/magic-button";
 import { links } from "@/config";
+import Plasma from "@/components/ui/plasma";
 
 export const Hero = () => {
   return (
@@ -24,6 +25,10 @@ export const Hero = () => {
 
       <div className="absolute left-0 top-0 flex h-screen w-full items-center justify-center bg-white bg-grid-black/[0.2] dark:bg-black-100 dark:bg-grid-white/[0.03]">
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black-100" />
+        {/* Plasma background */}
+        <div className="absolute inset-0 -z-10">
+          <Plasma color="#ff6b35" speed={0.6} direction="forward" scale={1.1} opacity={0.6} mouseInteractive />
+        </div>
       </div>
 
       <div className="relative z-10 my-20 flex justify-center">
