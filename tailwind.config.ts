@@ -3,9 +3,17 @@ import { default as flattenColorPalette } from "tailwindcss/lib/util/flattenColo
 
 import "tailwindcss/colors";
 
-// Use require for CommonJS module compatibility
-// @ts-ignore
-const svgToDataUri = require("mini-svg-data-uri").default || require("mini-svg-data-uri");
+// Lazy load mini-svg-data-uri to avoid build-time issues
+function getSvgToDataUri() {
+  try {
+    // @ts-ignore
+    const mod = require("mini-svg-data-uri");
+    return typeof mod === "function" ? mod : mod.default || mod;
+  } catch {
+    // Fallback if module can't be loaded
+    return (str: string) => `data:image/svg+xml,${encodeURIComponent(str)}`;
+  }
+}
 
 const config = {
   darkMode: ["class"],
@@ -180,6 +188,7 @@ const config = {
     require("tailwindcss-animate"),
     addVariablesForColors,
     function ({ matchUtilities, theme }: any) {
+      const svgToDataUri = getSvgToDataUri();
       matchUtilities(
         {
           "bg-grid": (value: any) => ({

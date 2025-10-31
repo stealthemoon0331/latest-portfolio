@@ -88,8 +88,8 @@
     @apply bg-background text-foreground;
   }
 
-  button {
-    @apply active:outline-none;
+  button:active {
+    outline: none;
   }
 }
 
