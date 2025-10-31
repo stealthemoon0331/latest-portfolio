@@ -82,8 +82,11 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   * {
-    @apply !scroll-smooth border-border;
+    border-color: hsl(var(--border));
   }
   body {
     @apply bg-background text-foreground;
