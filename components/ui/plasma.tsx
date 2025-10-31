@@ -104,8 +104,8 @@ export const Plasma = ({
     const directionMultiplier = direction === "reverse" ? -1.0 : 1.0;
 
     const renderer = new Renderer({ webgl: 2, alpha: true, antialias: false, dpr: Math.min(window.devicePixelRatio || 1, 2) });
-    const gl = renderer.gl as WebGL2RenderingContext;
-    const canvas = gl.canvas as HTMLCanvasElement;
+    const gl = renderer.gl;
+    const canvas = gl.canvas;
     canvas.style.display = "block";
     canvas.style.width = "100%";
     canvas.style.height = "100%";
