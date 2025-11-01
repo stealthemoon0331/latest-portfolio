@@ -71,6 +71,9 @@ export const Gallery = () => {
                 alt={storyPages[currentPage].title}
                 fill
                 className="object-cover"
+                loading="lazy"
+                quality={80}
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
           </div>

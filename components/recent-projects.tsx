@@ -226,6 +226,8 @@ export const RecentProjects = () => {
                       width={552}
                       src="/bg.png"
                       alt="bg-img"
+                      loading="lazy"
+                      quality={75}
                     />
                   </div>
 
@@ -235,6 +237,8 @@ export const RecentProjects = () => {
                     src={img}
                     alt={title}
                     className="absolute bottom-0 z-10"
+                    loading="lazy"
+                    quality={80}
                   />
                 </div>
 

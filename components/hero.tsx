@@ -1,12 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { FaLocationArrow } from "react-icons/fa6";
 
 import { Spotlight } from "@/components/ui/spotlight";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import { MagicButton } from "@/components/ui/magic-button";
 import { links } from "@/config";
-import Plasma from "@/components/ui/plasma";
+
+// Lazy load Plasma component (heavy WebGL)
+const Plasma = dynamic(() => import("@/components/ui/plasma").then((mod) => ({ default: mod.default })), {
+  ssr: false,
+});
 
 export const Hero = () => {
   return (
@@ -49,6 +54,8 @@ export const Hero = () => {
             width={600}
             height={600}
             className="mb-6 opacity-80 rounded-3xl object-cover shadow-md"
+            priority
+            quality={85}
           />
 
           <Link href="#projects" className="md:mt-10">

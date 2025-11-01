@@ -85,7 +85,7 @@ main.sphere-main {
 }
 
 .item__image {
-  position: absolute;
+  position: relative;
   display: block;
   inset: 10px;
   border-radius: var(--tile-radius, 12px);
