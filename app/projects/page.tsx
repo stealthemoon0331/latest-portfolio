@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { RecentProjects } from "@/components/recent-projects";
 import { FloatingNav } from "@/components/ui/floating-nav";
 import { navItems } from "@/data";
+import { IoArrowBack } from "react-icons/io5";
 
 function ProjectsContent() {
   const searchParams = useSearchParams();
@@ -44,9 +46,20 @@ export default function ProjectsPage() {
         />
       </div>
 
-      <FloatingNav navItems={navItems} />
+      {/* <FloatingNav navItems={navItems} /> */}
 
       <div className="w-full max-w-7xl">
+        {/* Back to Landing Page Button */}
+        <div className="mb-8 pt-8">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-black/20 px-4 py-2 text-sm text-white/70 transition-colors hover:bg-white/5 hover:text-white md:text-base"
+          >
+            <IoArrowBack className="h-4 w-4 md:h-5 md:w-5" />
+            <span>Back to Home</span>
+          </Link>
+        </div>
+
         <Suspense fallback={<div className="py-20"><h1 className="heading"><span className="text-purple">Loading Projects...</span></h1></div>}>
           <ProjectsContent />
         </Suspense>

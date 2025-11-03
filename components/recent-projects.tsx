@@ -3,8 +3,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
-import { SiReact, SiNextdotjs, SiTailwindcss, SiTypescript, SiThreedotjs, SiFramer } from "react-icons/si";
+import { useMemo, useState, useRef, useEffect } from "react";
+import { 
+  SiReact, 
+  SiNextdotjs, 
+  SiTailwindcss, 
+  SiTypescript, 
+  SiThreedotjs, 
+  SiFramer,
+  SiStripe,
+  SiFastapi,
+  SiOpenai,
+  SiMongodb,
+} from "react-icons/si";
 import { FaLocationArrow } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 
@@ -34,7 +45,7 @@ export const RecentProjects = ({
   initialSearch = "",
   initialFields = [],
   initialSkills = []
-}: RecentProjectsProps = {}) => {
+}: RecentProjectsProps) => {
   const router = useRouter();
   const [selectedFields, setSelectedFields] = useState<Set<string>>(
     new Set(initialFields.length > 0 ? initialFields : ["All"])
@@ -43,28 +54,32 @@ export const RecentProjects = ({
     new Set(initialSkills.length > 0 ? initialSkills : ["All"])
   );
   const [searchQuery, setSearchQuery] = useState<string>(initialSearch);
+  
+  // Refs for scrollable containers
+  const fieldsScrollRef = useRef<HTMLDivElement>(null);
+  const skillsScrollRef = useRef<HTMLDivElement>(null);
+  
+  // State for drag functionality
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const [currentScrollRef, setCurrentScrollRef] = useState<HTMLDivElement | null>(null);
 
-  // Map icon filenames to broad tech fields
-  const iconToField: Record<string, string> = {
-    "/re.svg": "Frontend",
-    "/next.svg": "Frontend",
-    "/tail.svg": "Frontend",
-    "/ts.svg": "Frontend",
-    "/three.svg": "Frontend",
-    "/fm.svg": "Frontend",
-    "/stream.svg": "Backend",
-    "/c.svg": "Auth",
-  };
-
-  const iconToSkill: Record<string, string> = {
-    "/re.svg": "React",
-    "/next.svg": "Next.js",
-    "/tail.svg": "Tailwind CSS",
-    "/ts.svg": "TypeScript",
-    "/three.svg": "Three.js",
-    "/fm.svg": "Framer Motion",
-    "/stream.svg": "Stream",
-    "/c.svg": "Clerk/Auth",
+  // Map skill names to tech fields
+  const skillToField: Record<string, string> = {
+    "React": "Frontend",
+    "Next.js": "Frontend",
+    "Tailwind CSS": "Frontend",
+    "TypeScript": "Frontend",
+    "Three.js": "Frontend",
+    "Framer Motion": "Frontend",
+    "GSAP": "Frontend",
+    "Stream": "Backend",
+    "Clerk": "Auth",
+    "Stripe": "Frontend",
+    "FastAPI": "Backend",
+    "OpenAI": "Backend",
+    "MongoDB": "Backend",
   };
 
   const projectWithFields = useMemo(
@@ -73,18 +88,13 @@ export const RecentProjects = ({
         ...p,
         fields: Array.from(
           new Set(
-            p.iconLists
-              .map((icon) => iconToField[icon])
+            (p.skills || [])
+              .map((skill) => skillToField[skill])
               .filter(Boolean) as string[]
           )
         ),
-        skills: Array.from(
-          new Set(
-            p.iconLists
-              .map((icon) => iconToSkill[icon])
-              .filter(Boolean) as string[]
-          )
-        ),
+        // Use skills directly from project data
+        skills: p.skills || [],
       })),
     []
   );
@@ -101,14 +111,21 @@ export const RecentProjects = ({
     return Array.from(set);
   }, [projectWithFields]);
 
+  // Icon component mapping for skill names
   const skillIconMap: Record<string, React.ReactNode> = {
-    React: <SiReact className="h-3.5 w-3.5 md:h-4 md:w-4" />,
-    "Next.js": <SiNextdotjs className="h-3.5 w-3.5 md:h-4 md:w-4" />,
-    "Tailwind CSS": <SiTailwindcss className="h-3.5 w-3.5 md:h-4 md:w-4" />,
-    TypeScript: <SiTypescript className="h-3.5 w-3.5 md:h-4 md:w-4" />,
-    "Three.js": <SiThreedotjs className="h-3.5 w-3.5 md:h-4 md:w-4" />,
-    "Framer Motion": <SiFramer className="h-3.5 w-3.5 md:h-4 md:w-4" />,
-    // Stream and Clerk/Auth don't have simple-icons here; will fallback to text
+    React: <SiReact className="h-4 w-4 md:h-5 md:w-5 text-[#61DAFB]" />,
+    "Next.js": <SiNextdotjs className="h-4 w-4 md:h-5 md:w-5 text-gray-100" />,
+    "Tailwind CSS": <SiTailwindcss className="h-4 w-4 md:h-5 md:w-5 text-[#38B2AC]" />,
+    TypeScript: <SiTypescript className="h-4 w-4 md:h-5 md:w-5 text-[#3178C6]" />,
+    "Three.js": <SiThreedotjs className="h-4 w-4 md:h-5 md:w-5 text-white" />,
+    "Framer Motion": <SiFramer className="h-4 w-4 md:h-5 md:w-5 text-[#0055FF]" />,
+    Stream: <SiReact className="h-4 w-4 md:h-5 md:w-5 text-[#FF5844]" />, // Using React icon as placeholder for Stream
+    Clerk: <SiReact className="h-4 w-4 md:h-5 md:w-5 text-[#4D4D4D]" />, // Using React icon as placeholder for Clerk
+    GSAP: <SiFramer className="h-4 w-4 md:h-5 md:w-5 text-[#88CE02]" />, // Using Framer icon as placeholder for GSAP
+    Stripe: <SiStripe className="h-4 w-4 md:h-5 md:w-5 text-[#635BFF]" />,
+    FastAPI: <SiFastapi className="h-4 w-4 md:h-5 md:w-5 text-[#009688]" />,
+    OpenAI: <SiOpenai className="h-4 w-4 md:h-5 md:w-5 text-white" />,
+    MongoDB: <SiMongodb className="h-4 w-4 md:h-5 md:w-5 text-[#47A248]" />,
   };
 
   const toggleField = (field: string) => {
@@ -147,6 +164,105 @@ export const RecentProjects = ({
       }
       return next;
     });
+  };
+
+  // Drag handlers for horizontal scrolling
+  const [dragStartX, setDragStartX] = useState(0);
+  const [isClickAllowed, setIsClickAllowed] = useState(true);
+
+  const handleMouseDown = (e: React.MouseEvent, ref: React.RefObject<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const startPos = e.pageX - ref.current.offsetLeft;
+    const currentScroll = ref.current.scrollLeft;
+    setDragStartX(e.pageX);
+    setStartX(startPos);
+    setScrollLeft(currentScroll);
+    setCurrentScrollRef(ref.current);
+    setIsClickAllowed(true);
+    ref.current.style.cursor = 'grab';
+    ref.current.style.userSelect = 'none';
+  };
+
+  // Handle mouse move on document level for better dragging
+  useEffect(() => {
+    const handleMouseMoveGlobal = (e: MouseEvent) => {
+      if (!currentScrollRef || !isDragging) return;
+      
+      const deltaX = Math.abs(e.pageX - dragStartX);
+      if (deltaX > 5) {
+        setIsClickAllowed(false);
+      }
+      
+      const x = e.pageX - currentScrollRef.offsetLeft;
+      const walk = (x - startX) * 2; // Scroll speed multiplier
+      currentScrollRef.scrollLeft = scrollLeft - walk;
+    };
+
+    const handleMouseUpGlobal = () => {
+      if (currentScrollRef) {
+        currentScrollRef.style.cursor = 'grab';
+        currentScrollRef.style.userSelect = '';
+      }
+      setIsDragging(false);
+      setCurrentScrollRef(null);
+      setTimeout(() => setIsClickAllowed(true), 100);
+    };
+
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMoveGlobal);
+      document.addEventListener('mouseup', handleMouseUpGlobal);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMoveGlobal);
+      document.removeEventListener('mouseup', handleMouseUpGlobal);
+    };
+  }, [isDragging, currentScrollRef, startX, scrollLeft, dragStartX]);
+
+  const handleMouseDownStart = (e: React.MouseEvent, ref: React.RefObject<HTMLDivElement>) => {
+    handleMouseDown(e, ref);
+    setIsDragging(true);
+  };
+
+  const handleMouseLeave = () => {
+    if (currentScrollRef) {
+      currentScrollRef.style.cursor = 'grab';
+      currentScrollRef.style.userSelect = '';
+    }
+    setIsDragging(false);
+    setCurrentScrollRef(null);
+  };
+
+  // Touch handlers for mobile swipe
+  const touchStartXRef = useRef(0);
+  const touchScrollLeftRef = useRef(0);
+
+  const handleTouchStart = (e: React.TouchEvent, ref: React.RefObject<HTMLDivElement>) => {
+    if (!ref.current) return;
+    setCurrentScrollRef(ref.current);
+    const touchStartX = e.touches[0].pageX - ref.current.offsetLeft;
+    touchStartXRef.current = e.touches[0].pageX;
+    setStartX(touchStartX);
+    touchScrollLeftRef.current = ref.current.scrollLeft;
+    setScrollLeft(ref.current.scrollLeft);
+    setIsClickAllowed(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!currentScrollRef) return;
+    const deltaX = Math.abs(e.touches[0].pageX - touchStartXRef.current);
+    if (deltaX > 5) {
+      setIsClickAllowed(false);
+      e.preventDefault();
+    }
+    const x = e.touches[0].pageX - currentScrollRef.offsetLeft;
+    const walk = (x - startX) * 2;
+    currentScrollRef.scrollLeft = touchScrollLeftRef.current - walk;
+  };
+
+  const handleTouchEnd = () => {
+    setCurrentScrollRef(null);
+    setTimeout(() => setIsClickAllowed(true), 100);
   };
 
   const filtered = useMemo(() => {
@@ -304,12 +420,28 @@ export const RecentProjects = ({
         <div className="mx-auto mt-4 flex max-w-7xl flex-col gap-2 px-4">
           {/* Fields */}
           <div className="flex items-center gap-2">
-            <div className="flex-1 overflow-x-auto [scrollbar-width:none]">
+            <div
+              ref={fieldsScrollRef}
+              className="flex-1 overflow-x-auto [scrollbar-width:none] cursor-grab active:cursor-grabbing select-none touch-pan-x"
+              style={{ WebkitOverflowScrolling: 'touch' }}
+              onMouseDown={(e) => handleMouseDownStart(e, fieldsScrollRef)}
+              onMouseLeave={handleMouseLeave}
+              onTouchStart={(e) => handleTouchStart(e, fieldsScrollRef)}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
               <div className="flex gap-2 pr-4">
                 {fields.map((f) => (
                   <button
                     key={f}
-                    onClick={() => showFilters ? toggleField(f) : handleFieldToggle(f)}
+                    onClick={(e) => {
+                      if (!isClickAllowed) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        return;
+                      }
+                      showFilters ? toggleField(f) : handleFieldToggle(f);
+                    }}
                     className={
                       "shrink-0 rounded-md border border-white/10 px-3 py-1 text-xs transition-colors md:text-sm " +
                       (selectedFields.has(f)
@@ -326,12 +458,28 @@ export const RecentProjects = ({
           <hr/>
           {/* Skills */}
           <div className="flex items-center gap-2">
-            <div className="flex-1 overflow-x-auto [scrollbar-width:none]">
+            <div
+              ref={skillsScrollRef}
+              className="flex-1 overflow-x-auto [scrollbar-width:none] cursor-grab active:cursor-grabbing select-none touch-pan-x"
+              style={{ WebkitOverflowScrolling: 'touch' }}
+              onMouseDown={(e) => handleMouseDownStart(e, skillsScrollRef)}
+              onMouseLeave={handleMouseLeave}
+              onTouchStart={(e) => handleTouchStart(e, skillsScrollRef)}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
               <div className="flex gap-2 pr-4">
                 {skills.map((s) => (
                   <button
                     key={s}
-                    onClick={() => showFilters ? toggleSkill(s) : handleSkillToggle(s)}
+                    onClick={(e) => {
+                      if (!isClickAllowed) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        return;
+                      }
+                      showFilters ? toggleSkill(s) : handleSkillToggle(s);
+                    }}
                     className={
                       "shrink-0 rounded-md border border-white/10 px-2 py-1 text-xs transition-colors md:text-sm " +
                       (selectedSkills.has(s)
@@ -411,21 +559,18 @@ export const RecentProjects = ({
 
                 <div className="mb-3 mt-7 flex items-center justify-between">
                   <div className="flex items-center">
-                    {iconLists.map((icon, i) => (
+                    {iconLists.map((skill, i) => (
                       <div
-                        key={icon}
+                        key={`${id}-${skill}-${i}`}
                         className="flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.2] bg-black lg:h-10 lg:w-10"
                         style={{
                           transform: `translateX(-${5 * i * 2}px)`,
                         }}
+                        title={skill}
                       >
-                        <Image
-                          height={40}
-                          width={40}
-                          src={icon}
-                          alt={icon}
-                          className="p-2"
-                        />
+                        {skillIconMap[skill] || (
+                          <span className="text-[10px] text-white/70">{skill.charAt(0)}</span>
+                        )}
                       </div>
                     ))}
                   </div>
